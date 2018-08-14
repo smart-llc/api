@@ -78,6 +78,17 @@ return [
             'prefix' => '',
         ],
 
+        'testing' => [
+            'driver' => 'mysql',
+            'host' => env('TESTING_HOST'),
+            'port' => env('TESTING_PORT'),
+            'database' => env('TESTING_DATABASE'),
+            'username' => env('TESTING_USERNAME'),
+            'password' => env('TESTING_PASSWORD'),
+            'unix_socket' => env('TESTING_SOCKET'),
+            'charset' => env('TESTING_CHARSET'),
+        ],
+
     ],
 
     /*
