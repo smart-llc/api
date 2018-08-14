@@ -23,6 +23,9 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    const NAME_MAX_LENGTH = 50;
+    const EMAIL_MAX_LENGTH = 50;
+
     /**
      * The table associated with the model.
      *
