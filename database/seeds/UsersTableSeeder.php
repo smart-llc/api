@@ -1,23 +1,22 @@
 <?php
 
+use App\User;
 use Illuminate\Database\Seeder;
 
 /**
- * The database root seeder.
+ * The Users table seeder.
  *
  * @author  Gleb Karpushkin  <rugleb@gmail.com>
  */
-class DatabaseSeeder extends Seeder
+class UsersTableSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
-         $this->call([
-             UsersTableSeeder::class,
-         ]);
+        factory(User::class, 10)->create();
     }
 }
