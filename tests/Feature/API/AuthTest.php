@@ -3,9 +3,9 @@
 namespace Tests\Feature\API;
 
 use App\User;
+use App\Password;
 use Tests\TestCase;
 use App\Mail\PasswordMail;
-use Illuminate\Mail\Mailable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -38,8 +38,18 @@ class AuthTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        Mail::assertQueued(PasswordMail::class, function (Mailable $mail) use ($user) {
+        /**
+         * @var Password $password
+         */
+        $password = new Password();
+
+        Mail::assertQueued(PasswordMail::class, function (PasswordMail $mail) use ($user, & $password) {
+            $password = $mail->password;
             return $mail->to($user->email);
         });
+
+        $response = $this->postJson('api/login', $password->toArray());
+
+        $response->assertStatus(Response::HTTP_OK);
     }
 }

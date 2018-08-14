@@ -24,7 +24,7 @@ class PasswordMail extends Mailable implements ShouldQueue
      *
      * @var Password $password
      */
-    protected $password;
+    public $password;
 
     /**
      * Create a new message instance.
@@ -44,8 +44,6 @@ class PasswordMail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->view('mails.auth.password', [
-            'password' => $this->password,
-        ]);
+        return $this->view('mails.auth.password');
     }
 }
