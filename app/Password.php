@@ -14,7 +14,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @property  string  $code
  * @property  Carbon  $expires_at
  *
- * @method  static  Builder  notExpired(Builder $query)
+ * @method  static  Builder   notExpired(Builder $query)
+ * @method  static  Password  create(array $data)
  *
  * @author  Gleb Karpushkin  <rugleb@gmail.com>
  *
