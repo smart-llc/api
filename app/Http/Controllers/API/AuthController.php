@@ -83,7 +83,7 @@ class AuthController extends Controller
         if ($password = $this->getPassword($request->only('email', 'code'))) {
             $this->disablePasswords($request->only('email'));
             return response()->json([
-                'token' => $this->getUser($request->only('email'))->createToken(static::TOKEN_NAME)
+                'token' => $this->getUser($request->only('email'))->createToken(static::TOKEN_NAME)->accessToken
             ]);
         }
 
