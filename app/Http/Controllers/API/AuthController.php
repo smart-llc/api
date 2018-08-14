@@ -35,6 +35,9 @@ class AuthController extends Controller
     public function index(PasswordRequest $request): JsonResponse
     {
         $email = $request->get('email');
+
+        $this->disablePasswords($request->only('email'));
+
         $password = $this->createPassword(compact('email'));
 
         $this->notify($email, $password);
@@ -78,7 +81,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request): JsonResponse
     {
         if ($password = $this->getPassword($request->only('email', 'code'))) {
-            $password->delete();
+            $this->disablePasswords($request->only('email'));
             return response()->json([
                 'token' => $this->getUser($request->only('email'))->createToken(static::TOKEN_NAME)
             ]);
@@ -103,6 +106,11 @@ class AuthController extends Controller
         $password = Password::notExpired()->where($data)->first();
 
         return $password;
+    }
+
+    protected function disablePasswords(array $data)
+    {
+        Password::query()->where($data)->delete();
     }
 
     /**
