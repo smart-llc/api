@@ -57,9 +57,6 @@
             "@php artisan package:discover"
         ],
         "compile": [
-            "sudo chmod +x heroku.sh",
-            "sudo chmod -R 777 storage/",
-            "sudo chmod -R 777 public/"
         ]
     },
     "config": {
