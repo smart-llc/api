@@ -56,6 +56,14 @@
         "sort-packages": true,
         "optimize-autoloader": true
     },
+    "extra": {
+        "heroku": {
+            "compile": [
+                "chmod +x heroku.sh",
+                "chmod -R 777 storage/"
+            ]
+        }
+    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }
