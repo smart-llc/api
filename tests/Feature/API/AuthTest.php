@@ -51,5 +51,14 @@ class AuthTest extends TestCase
         $response = $this->postJson('api/login', $password->toArray());
 
         $response->assertStatus(Response::HTTP_OK);
+
+        $token = $response->decodeResponseJson('token');
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer '.$token,
+        ])->getJson('api/user');
+
+        $response->assertStatus(Response::HTTP_OK);
+
     }
 }
