@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+chmod -R 777 storage/
+chmod -R 777 public/
 composer install --optimize-autoloader
 composer dump-autoload --optimize
 php artisan key:generate
