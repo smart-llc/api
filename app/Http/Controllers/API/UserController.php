@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 use App\Http\Resources\UserResource;
+use App\Http\Controllers\Controller;
 
 /**
  * The User controller.
@@ -62,13 +63,8 @@ class UserController extends Controller
      */
     public function destroy(Request $request)
     {
-        /**
-         * @var  \App\User  $user
-         */
-        $user = $request->user();
+        $request->user()->delete();
 
-        return response()->json([
-            'status' => (bool) $user->delete(),
-        ]);
+        return response()->json([], Response::HTTP_OK);
     }
 }
