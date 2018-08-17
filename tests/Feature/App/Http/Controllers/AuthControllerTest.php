@@ -6,6 +6,7 @@ use App\User;
 use App\Password;
 use Tests\TestCase;
 use App\Mail\PasswordMail;
+use Laravel\Passport\Token;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -106,15 +107,20 @@ class AuthControllerTest extends TestCase
      * Tear down testing environment.
      *
      * @return void
+     * @throws \Exception
      */
     public function tearDown()
     {
-        // We finish the test by checking that the user
-        // was one and already deleted.
-        $deleted = User::query()->where($this->user->only('email'))->delete();
+        $user = User::query()->where($this->user->only('email'))->first();
 
-        $this->assertEquals(1, $deleted);
-        $this->assertDatabaseMissing($this->user->getTable(), $this->user->only('email'));
+        $this->assertTrue($user instanceof User);
+        $this->assertEquals($user->email, $this->user->email);
+
+        $tokensDeleted = Token::query()->where('user_id', $user->id)->delete();
+        $this->assertEquals(1, $tokensDeleted);
+
+        $this->assertTrue($user->delete());
+        $this->assertEquals(0, User::query()->where($this->user->only('email'))->count());
 
         parent::tearDown();
     }
