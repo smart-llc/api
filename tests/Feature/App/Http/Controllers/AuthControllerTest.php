@@ -58,7 +58,7 @@ class AuthControllerTest extends TestCase
         Mail::fake();
 
         // First, the user must enter his email and send it to API.
-        $response = $this->postJson('api/auth', $this->user->toArray());
+        $response = $this->postJson(route('register'), $this->user->toArray());
 
         // In response, API should put the task in the queue
         // and send letter with a confirmation code.
@@ -81,7 +81,7 @@ class AuthControllerTest extends TestCase
 
         // Next, we will try to send an e-mail and confirmation
         // code to the authorization API route.
-        $response = $this->postJson('api/login', $this->password->toArray());
+        $response = $this->postJson(route('login'), $this->password->toArray());
 
         // In response, we must obtain an authorization token.
         $response

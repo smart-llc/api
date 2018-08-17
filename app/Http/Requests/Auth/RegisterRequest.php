@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Requests\API;
+namespace App\Http\Requests\Auth;
 
+use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * The Login request.
+ * The API register request.
  *
  * @author  Gleb Karpushkin  <rugleb@gmail.com>
  *
- * @package App\Http\Requests\API
+ * @package App\Http\Requests\Auth
  */
-class LoginRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,8 +32,7 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required|string',
-            'email' => 'required|string|email',
+            'email' => 'required|string|email|max:'.User::EMAIL_MAX_LENGTH,
         ];
     }
 }

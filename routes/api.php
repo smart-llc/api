@@ -1,8 +1,8 @@
 <?php
 
-Route::post('auth', 'API\AuthController@index')->name('auth.index');
-Route::post('login', 'API\AuthController@login')->name('auth.login');
-
 Route::get('user', 'API\UserController@show');
 Route::put('user', 'API\UserController@update');
 Route::delete('user', 'API\UserController@destroy');
+
+Route::post('login', 'API\Auth\LoginController@login')->name('login');
+Route::post('register', 'API\Auth\RegisterController@register')->name('register');

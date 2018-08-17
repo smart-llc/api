@@ -16,6 +16,8 @@ use Laravel\Passport\HasApiTokens;
  * @property  Carbon  $created_at
  * @property  Carbon  $updated_at
  *
+ * @method  static  User  firstOrCreate(array $data)
+ *
  * @author  Gleb Karpushkin  <rugleb@gmail.com>
  *
  * @package App

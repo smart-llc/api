@@ -2,9 +2,17 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Event;
+use App\Events\PasswordCreated;
+use App\Listeners\SendPasswordNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
+/**
+ * The Event service provider.
+ *
+ * @author  Gleb Karpushkin  <rugleb@gmail.com>
+ *
+ * @package App\Providers
+ */
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -13,8 +21,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\Event' => [
-            'App\Listeners\EventListener',
+        PasswordCreated::class => [
+            SendPasswordNotification::class,
         ],
     ];
 
