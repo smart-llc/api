@@ -25,7 +25,7 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the User resource.
      *
      * @param  Request  $request
      * @return UserResource
@@ -36,7 +36,7 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the User resource in storage.
      *
      * @param  Request  $request
      * @return UserResource
@@ -54,7 +54,7 @@ class UserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the User resource from storage.
      *
      * @param  Request  $request
      * @return UserResource
