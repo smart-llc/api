@@ -24,14 +24,19 @@ class UserFactoryTest extends TestCase
     public function testMakeMethod()
     {
         /**
-         * The User instance.
+         * The User model instance.
          *
          * @var  User  $user
          */
         $user = factory(User::class)->make();
 
         $this->assertTrue($user instanceof User);
-        $this->assertEquals($user->email, filter_var($user->email, FILTER_VALIDATE_EMAIL));
+        $this->assertEquals(
+            $user->email,
+            filter_var($user->email, FILTER_VALIDATE_EMAIL)
+        );
+
+        $this->assertDatabaseMissing($user->getTable(), $user->toArray());
     }
 
     /**
@@ -55,5 +60,6 @@ class UserFactoryTest extends TestCase
         $this->assertDatabaseHas($user->getTable(), $user->toArray());
 
         $this->assertTrue($user->delete());
+        $this->assertDatabaseMissing($user->getTable(), $user->toArray());
     }
 }

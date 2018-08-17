@@ -25,7 +25,7 @@ class PasswordFactoryTest extends TestCase
     public function testMakeMethod()
     {
         /**
-         * The User instance.
+         * The Password model instance.
          *
          * @var  Password  $password
          */
@@ -36,6 +36,8 @@ class PasswordFactoryTest extends TestCase
             $password->email,
             filter_var($password->email, FILTER_VALIDATE_EMAIL)
         );
+
+        $this->assertDatabaseMissing($password->getTable(), $password->toArray());
     }
 
     /**
@@ -47,7 +49,7 @@ class PasswordFactoryTest extends TestCase
     public function testCreateMethod()
     {
         /**
-         * The User instance.
+         * The Password model instance.
          *
          * @var  Password  $password
          */
@@ -55,10 +57,11 @@ class PasswordFactoryTest extends TestCase
 
         $this->assertDatabaseHas($password->getTable(), $password->toArray());
 
-        $this->assertEquals(strlen($password->code), 4);
+        $this->assertEquals(4, strlen($password->code));
         $this->assertTrue($password->expires_at instanceof Carbon);
 
         $this->assertTrue($password->delete());
+        $this->assertDatabaseMissing($password->getTable(), $password->toArray());
     }
 
 }
