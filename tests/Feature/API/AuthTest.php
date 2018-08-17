@@ -21,44 +21,102 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class AuthTest extends TestCase
 {
     /**
-     * Testing API Auth pipeline.
+     * @var User $user
+     */
+    protected $user;
+
+    /**
+     * @var Password $password
+     */
+    protected $password;
+
+    /**
+     * Set up testing environment.
      *
      * @return void
      */
-    public function testAuth()
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->password = null;
+        $this->user = factory(User::class)->make();
+
+        // Before running the test, make sure that the user
+        // with this name does not exist in our database.
+        $this->assertDatabaseMissing($this->user->getTable(), $this->user->only('email'));
+    }
+
+    /**
+     * Testing Auth pipeline.
+     *
+     * @return void
+     */
+    public function testAuthPipeline()
     {
         Mail::fake();
 
-        /**
-         * @var User $user
-         */
-        $user = factory(User::class)->make();
+        // First, the user must enter his email and send it to API.
+        $response = $this->postJson('api/auth', $this->user->toArray());
 
-        $response = $this->postJson('api/auth', $user->toArray());
+        // In response, API should put the task in the queue
+        // and send letter with a confirmation code.
+        $response->assertStatus(Response::HTTP_ACCEPTED);
 
-        $response->assertStatus(Response::HTTP_OK);
-
-        /**
-         * @var Password $password
-         */
-        $password = new Password();
-
-        Mail::assertQueued(PasswordMail::class, function (PasswordMail $mail) use ($user, & $password) {
-            $password = $mail->password;
-            return $mail->to($user->email);
+        Mail::assertQueued(PasswordMail::class, function (PasswordMail $mail) {
+            // Make sure that the sent letter contains the
+            // confirmation code (created password).
+            $this->password = $mail->password;
+            // And the letter went to the entered email address.
+            return $mail->to($this->user->email);
         });
 
-        $response = $this->postJson('api/login', $password->toArray());
+        // Also, necessary to verify that the confirmation code
+        // for this had to be the only one in the database.
+        $passwords = Password::query()->where($this->user->only('email'))->get();
 
-        $response->assertStatus(Response::HTTP_OK);
+        $this->assertEquals(1, $passwords->count());
+        $this->assertTrue($this->password->is($passwords->first()));
 
-        $token = $response->decodeResponseJson('token');
+        // Next, we will try to send an e-mail and confirmation
+        // code to the authorization API route.
+        $response = $this->postJson('api/login', $this->password->toArray());
 
+        // In response, we must obtain an authorization token.
+        $response
+            ->assertJsonStructure(['token'])
+            ->assertStatus(Response::HTTP_CREATED);
+
+        // Finally, we will try to access the protected
+        // resource using the received token.
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer '.$token,
+            'Authorization' => 'Bearer ' . $response->decodeResponseJson('token')
         ])->getJson('api/user');
 
         $response->assertStatus(Response::HTTP_OK);
 
+        // Make sure that we deactivated all created passwords
+        // for authorization through this email.
+        $passwords = Password::query()->where($this->user->only('email'))->get();
+
+        $this->assertEquals(0, $passwords->count());
     }
+
+    /**
+     * Tear down testing environment.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        // We finish the test by checking that the user
+        // was one and already deleted.
+        $deleted = User::query()->where($this->user->only('email'))->delete();
+
+        $this->assertEquals(1, $deleted);
+        $this->assertDatabaseMissing($this->user->getTable(), $this->user->only('email'));
+
+        parent::tearDown();
+    }
+
 }
