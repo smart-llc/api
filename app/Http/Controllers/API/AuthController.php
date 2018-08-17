@@ -44,7 +44,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Please, check your email.',
-        ]);
+        ], JsonResponse::HTTP_ACCEPTED);
     }
 
     /**
@@ -84,7 +84,7 @@ class AuthController extends Controller
             $this->disablePasswords($request->only('email'));
             return response()->json([
                 'token' => $this->getUser($request->only('email'))->createToken(static::TOKEN_NAME)->accessToken
-            ]);
+            ], JsonResponse::HTTP_CREATED);
         }
 
         return response()->json([
