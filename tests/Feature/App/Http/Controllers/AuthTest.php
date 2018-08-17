@@ -19,7 +19,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
  *
  * @package Tests\Feature\API
  */
-class AuthControllerTest extends TestCase
+class AuthTest extends TestCase
 {
     /**
      * @var User $user
@@ -88,7 +88,7 @@ class AuthControllerTest extends TestCase
             ->assertJsonStructure(['token'])
             ->assertStatus(Response::HTTP_CREATED);
 
-        // Finally, we will try to access the protected
+        // Now, we will try to access the protected
         // resource using the received token.
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $response->decodeResponseJson('token')
@@ -101,6 +101,15 @@ class AuthControllerTest extends TestCase
         $passwords = Password::query()->where($this->user->only('email'))->get();
 
         $this->assertEquals(0, $passwords->count());
+
+        // Finally, we will try to logout from API.
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $response->decodeResponseJson('token')
+        ])->postJson(route('logout'));
+
+        $response
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson(['status' => true]);
     }
 
     /**
@@ -117,7 +126,7 @@ class AuthControllerTest extends TestCase
         $this->assertEquals($user->email, $this->user->email);
 
         $tokensDeleted = Token::query()->where('user_id', $user->id)->delete();
-        $this->assertEquals(1, $tokensDeleted);
+        $this->assertEquals(0, $tokensDeleted);
 
         $this->assertTrue($user->delete());
         $this->assertEquals(0, User::query()->where($this->user->only('email'))->count());
