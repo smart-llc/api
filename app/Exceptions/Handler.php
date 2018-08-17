@@ -7,6 +7,13 @@ use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
+/**
+ * The root exception handler.
+ *
+ * @author  Gleb Karpushkin  <rugleb@gmail.com>
+ *
+ * @package App\Exceptions
+ */
 class Handler extends ExceptionHandler
 {
     /**
