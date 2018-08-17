@@ -12,13 +12,13 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 /**
- * The API Auth test case.
+ * The API Auth controller test case.
  *
  * @author  Gleb Karpushkin  <rugleb@gmail.com>
  *
  * @package Tests\Feature\API
  */
-class AuthTest extends TestCase
+class AuthControllerTest extends TestCase
 {
     /**
      * @var User $user
