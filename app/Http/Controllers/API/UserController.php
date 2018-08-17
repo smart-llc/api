@@ -4,9 +4,12 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 
 /**
  * The User controller.
+ *
+ * @author  Gleb Karpushkin  <rugleb@gmail.com>
  *
  * @package App\Http\Controllers\API
  */
@@ -23,39 +26,49 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @return UserResource
      */
     public function show(Request $request)
     {
-        return response()->json([
-            'data' => $request->user()->toArray(),
-        ]);
+        return new UserResource($request->user());
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @return UserResource
      */
     public function update(Request $request)
     {
-        return response()->json([
-            'status' => $request->user()->update($request->only(['name', 'email'])),
-        ]);
+        /**
+         * @var  \App\User  $user
+         */
+        $user = $request->user();
+
+        $user->update($request->only($user->getFillable()));
+
+        return new UserResource($user);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @return UserResource
+     *
+     * @throws \Exception
      */
     public function destroy(Request $request)
     {
+        /**
+         * @var  \App\User  $user
+         */
+        $user = $request->user();
+
         return response()->json([
-            'status' => $request->user()->delete(),
+            'status' => (bool) $user->delete(),
         ]);
     }
 }
