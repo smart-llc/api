@@ -3,6 +3,7 @@
 namespace Tests\Unit\App\Models;
 
 use App\Password;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -31,9 +32,13 @@ class PasswordTest extends TestCase
          */
         $password = factory(Password::class)->create();
 
-        $founded = Password::query()->notExpired()->orderBy('id', 'DESC')->first();
+        $founded = Password::notExpired()->orderByDesc('id')->first();
 
         $this->assertTrue($password->is($founded));
         $this->assertTrue($password->delete());
+
+        foreach (Password::notExpired()->get() as $password) {
+            $this->assertGreaterThan(Carbon::now(), $password->expires_at);
+        }
     }
 }
