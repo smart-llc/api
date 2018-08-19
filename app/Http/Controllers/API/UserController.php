@@ -32,7 +32,9 @@ class UserController extends Controller
      */
     public function show(Request $request)
     {
-        return new UserResource($request->user());
+        $user = $request->user()->makeVisible('email');
+
+        return new UserResource($user);
     }
 
     /**
@@ -63,8 +65,8 @@ class UserController extends Controller
      */
     public function destroy(Request $request)
     {
-        $request->user()->delete();
+        $status = (bool) $request->user()->delete();
 
-        return response()->json([], Response::HTTP_OK);
+        return response()->json(compact($status), Response::HTTP_OK);
     }
 }

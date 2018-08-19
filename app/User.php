@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Laravel\Passport\HasApiTokens;
+use App\Models\Traits\HasDocumentation;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -16,8 +17,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property  Carbon  $created_at
  * @property  Carbon  $updated_at
  *
- * @method  static  User  firstOrCreate(array $data)
- *
  * @author  Gleb Karpushkin  <rugleb@gmail.com>
  *
  * @package App
@@ -25,7 +24,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable,
-        HasApiTokens;
+        HasApiTokens,
+        HasDocumentation;
 
     const NAME_MAX_LENGTH = 50;
     const EMAIL_MAX_LENGTH = 50;
