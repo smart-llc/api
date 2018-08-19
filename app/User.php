@@ -3,9 +3,9 @@
 namespace App;
 
 use Carbon\Carbon;
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Passport\HasApiTokens;
 
 /**
  * The User model.
@@ -24,7 +24,8 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens;
+    use Notifiable,
+        HasApiTokens;
 
     const NAME_MAX_LENGTH = 50;
     const EMAIL_MAX_LENGTH = 50;
