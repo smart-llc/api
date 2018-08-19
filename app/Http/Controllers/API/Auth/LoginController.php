@@ -68,7 +68,7 @@ class LoginController extends Controller
      */
     protected function disablePasswords(string $email): void
     {
-        Password::query()->where(['email' => $email])->delete();
+        Password::query()->where(compact('email'))->delete();
     }
 
     /**

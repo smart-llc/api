@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use App\Models\Traits\HasDocumentation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -15,7 +16,6 @@ use Illuminate\Database\Eloquent\Builder;
  * @property  Carbon  $expires_at
  *
  * @method  static  Builder   notExpired()
- * @method  static  Password  create(array $data)
  *
  * @author  Gleb Karpushkin  <rugleb@gmail.com>
  *
@@ -26,6 +26,8 @@ class Password extends Model
     const CODE_LENGTH = 4;
     const CODE_MAX_LENGTH = Password::CODE_LENGTH;
     const EMAIL_MAX_LENGTH = User::EMAIL_MAX_LENGTH;
+
+    use HasDocumentation;
 
     /**
      * Indicates if the model should be timestamped.
