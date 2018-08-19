@@ -32,7 +32,7 @@ class UserControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->create();
+        $this->user = factory(User::class)->create()->makeVisible('email');
 
         $this->assertDatabaseHas($this->user->getTable(), $this->user->only('email'));
     }

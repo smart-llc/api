@@ -41,7 +41,7 @@ class AuthTest extends TestCase
         parent::setUp();
 
         $this->password = null;
-        $this->user = factory(User::class)->make();
+        $this->user = factory(User::class)->make()->makeVisible('email');
 
         // Before running the test, make sure that the user
         // with this name does not exist in our database.
