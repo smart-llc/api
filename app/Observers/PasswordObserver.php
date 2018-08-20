@@ -20,10 +20,12 @@ class PasswordObserver
      *
      * @param  Password  $password
      * @return void
+     *
+     * @throws \Exception
      */
     public function creating(Password $password)
     {
-        $password->code = Str::random(Password::CODE_LENGTH);
+        $password->code = Password::generateSecretCode();
         $password->expires_at = Carbon::now()->addDay();
     }
 }

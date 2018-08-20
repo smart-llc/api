@@ -6,6 +6,9 @@ use Carbon\Carbon;
 use App\Models\Traits\HasDocumentation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use phpseclib\Crypt\Random;
 
 /**
  * The Password model.
@@ -70,5 +73,21 @@ class Password extends Model
     public function scopeNotExpired(Builder $query): Builder
     {
         return $query->where('expires_at', '>', Carbon::now());
+    }
+
+    /**
+     * Generate secret code.
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public static function generateSecretCode(): string
+    {
+        $random = '';
+        for ($i = Password::CODE_LENGTH; $i; $i--) {
+            $random .= random_int(0, 9);
+        }
+
+        return $random;
     }
 }
