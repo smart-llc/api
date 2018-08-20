@@ -31,7 +31,8 @@ class RegisterController extends Controller
 
         event(new PasswordCreated($password));
 
-        return response()->json([], JsonResponse::HTTP_ACCEPTED);
+        $message = 'Please, check your email address.';
+        return response()->json(compact('message'), JsonResponse::HTTP_ACCEPTED);
     }
 
     /**
